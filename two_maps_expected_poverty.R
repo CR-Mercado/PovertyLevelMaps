@@ -1,21 +1,14 @@
 setwd("~/Maps for Fun/ACS_17_5YR_B17024")
 x <- "ACS_17_5YR_B17024_with_ann.csv"
-x <- read.csv(x,stringsAsFactors = FALSE) # this file is long format 
+x <- read.csv(x,stringsAsFactors = FALSE)
 
-# data has annotations as a second header row, so row 1 will be made the real column names 
-# separate the 18_24 data 
 segment_18_24_names <- names(grep(pattern = "18 to 24",as.vector(x[1,]),value = TRUE))
-segment_18_24_names <- grep("HD01", segment_18_24_names, value = TRUE) 
-# Selected the Estimate columns (don't want the margin of error columns) 
-
+segment_18_24_names <- grep("HD01", segment_18_24_names, value = TRUE) # remove Margin of Error Columns 
 segment_18_24 <- x[,c("GEO.id","GEO.id2","GEO.display.label","HD01_VD01",segment_18_24_names)]
 
-# replace colnames with first row annotated 
 colnames(segment_18_24) <- segment_18_24[1,]
 segment_18_24 <- segment_18_24[-1,]
 
-# need to make the numbers numeric
-# preserve original data and create a copy with population within each class 
 percent_18_24 <- segment_18_24
 for(i in 4:17){ 
   segment_18_24[,i] <- as.numeric(segment_18_24[,i])
@@ -99,17 +92,20 @@ library(albersusa)
 county_ <- albersusa::counties_sf()
 
 
-# to make the merge easier, matching colnames 
+
 percent_18_24$fips <- percent_18_24$Id2
 percent_25_34$fips <- percent_25_34$Id2
 
 
-#' merge then write to shapefile for QGIS & Adobe Illustrator 
-
+#' write to shapefile for QGIS & Adobe Illustrator 
 shapes_18_24 <- merge(x = county_[,"fips"],y = percent_18_24,by = "fips", all.x = TRUE)  
 shapes_25_34 <- merge(x = county_[,"fips"], y = percent_25_34, by = "fips", all.x = TRUE)
 
-library(sf)
 
+library(sf)
 write_sf(shapes_18_24,"shapes_18_24.shp")
 write_sf(shapes_25_34,"shapes_25_34.shp")
+
+# just to make the state outline darker 
+us_states_shape <- albersusa::usa_sf()[,"geometry"]
+write_sf(us_states_shape,"us_state_outlines.shp")
