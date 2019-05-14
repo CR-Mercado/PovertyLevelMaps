@@ -15,8 +15,20 @@ For each class of poverty level in each dataset (18-24 and 25-34) I found the % 
 
 ## QGIS Use 
 
-I use QGIS to create the map from the shapefile outputs from R. The QGIS output is an SVG file that Adobe Illustrator can manipulate.
+I use QGIS to create the map from the shapefile outputs from R. The QGIS output is an SVG file that Adobe Illustrator can manipulate. I also went ahead and fused some of the classes to make the map more interpretable. QGIS's mapboard creates the legend. Technically this could have been done in R, but QGIS has easier map exploration for setting color schemes. I also added a transparent state outline layer (see update to the R script). 
+
+
+The final classes are: 
+
+* < .5 
+* .5 - .99 
+* 1.00 - 1.49 
+* 1.5 - 1.99 
+* 2.00 - 2.99  (do not have 1/2 granularity anymore)
+* 3.00 - 3.99 
+* 4.00 - 4.99
+* 5.00+ 
 
 ## Adobe Illustrator Use 
 
-I use Adobe Illustrator to highlight specific regions and optimize the map layout. 
+I use Adobe Illustrator to optimize the map layout, clean the line strokes, and reduce the legend. 
